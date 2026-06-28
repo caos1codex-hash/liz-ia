@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LIZ IA</string>
+    <string name="welcome_title">LIZ IA</string>
+    <string name="welcome_subtitle">Tu asistente de IA local y privado</string>
+    <string name="new_chat">Nuevo chat</string>
+    <string name="settings">Ajustes</string>
+    <string name="send">Enviar</string>
+    <string name="message_hint">Escribe un mensaje...</string>
+    <string name="empty_chat">Inicia una conversación</string>
+    <string name="delete_chat">Eliminar chat</string>
+    <string name="copy_message">Copiar mensaje</string>
+    <string name="regenerate">Regenerar respuesta</string>
+    <string name="temperature">Temperatura</string>
+    <string name="top_k">Top K</string>
+    <string name="top_p">Top P</string>
+    <string name="font_size">Tamaño de fuente</string>
+    <string name="clear_chats">Borrar todos los chats</string>
+    <string name="clear_cache">Limpiar caché</string>
+    <string name="model_path">Ruta del modelo</string>
+    <string name="model_path_placeholder">/models/model.bin</string>
+    <string name="home">Inicio</string>
+    <string name="back">Volver</string>
+</resources>
