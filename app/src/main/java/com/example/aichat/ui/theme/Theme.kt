@@ -7,29 +7,33 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val LightColors = lightColorScheme(
-    primary = md_light_primary,
-    onPrimary = md_light_onPrimary,
-    primaryContainer = md_light_primaryContainer,
-    secondary = md_light_secondary,
-    onSecondary = md_light_onSecondary,
-    background = md_light_background,
-    onBackground = md_light_onBackground,
-    surface = md_light_surface,
-    onSurface = md_light_onSurface,
-    surfaceVariant = md_light_surfaceVariant
+    primary = LizPrimary,
+    onPrimary = androidx.compose.ui.graphics.Color.White,
+    primaryContainer = LightSurfaceVariant,
+    onPrimaryContainer = LightOnBackground,
+    secondary = LizSecondary,
+    onSecondary = androidx.compose.ui.graphics.Color.Black,
+    tertiary = LizTertiary,
+    background = LightBackground,
+    onBackground = LightOnBackground,
+    surface = LightSurface,
+    onSurface = LightOnSurface,
+    surfaceVariant = LightSurfaceVariant
 )
 
 private val DarkColors = darkColorScheme(
-    primary = md_dark_primary,
-    onPrimary = md_dark_onPrimary,
-    primaryContainer = md_dark_primaryContainer,
-    secondary = md_dark_secondary,
-    onSecondary = md_dark_onSecondary,
-    background = md_dark_background,
-    onBackground = md_dark_onBackground,
-    surface = md_dark_surface,
-    onSurface = md_dark_onSurface,
-    surfaceVariant = md_dark_surfaceVariant
+    primary = LizAccent,
+    onPrimary = androidx.compose.ui.graphics.Color.Black,
+    primaryContainer = DarkSurfaceVariant,
+    onPrimaryContainer = DarkOnSurface,
+    secondary = LizSecondary,
+    onSecondary = androidx.compose.ui.graphics.Color.Black,
+    tertiary = LizTertiary,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
+    surface = DarkSurface,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVariant
 )
 
 @Composable
@@ -37,7 +41,8 @@ fun AIChatTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColors else LightColors
+    // Forzamos tema oscuro premium para mostrar los efectos AAA en todo su esplendor
+    val colors = DarkColors
     MaterialTheme(
         colorScheme = colors,
         typography = AppTypography,

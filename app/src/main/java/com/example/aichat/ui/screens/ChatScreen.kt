@@ -17,9 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,9 +28,12 @@ import com.example.aichat.R
 import com.example.aichat.ui.components.AppTopBar
 import com.example.aichat.ui.components.ChatInput
 import com.example.aichat.ui.components.MessageBubble
+import com.example.aichat.ui.effects.AuroraBackground
+import com.example.aichat.ui.effects.CyberGridOverlay
+import com.example.aichat.ui.effects.FloatingParticles
+import com.example.aichat.ui.effects.ScanLineOverlay
 import com.example.aichat.utils.Constants
 import com.example.aichat.viewmodel.ChatViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,14 +52,13 @@ fun ChatScreen(
     val listState = rememberLazyListState()
     val snackbarHost = remember { SnackbarHostState() }
 
-    // Auto-scroll al último mensaje
+    // Auto-scroll
     LaunchedEffect(messages.size) {
         if (messages.isNotEmpty()) {
             listState.animateScrollToItem(messages.lastIndex)
         }
     }
 
-    // Toast transient
     LaunchedEffect(toast) {
         toast?.let {
             snackbarHost.showSnackbar(it)
@@ -64,47 +66,59 @@ fun ChatScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            AppTopBar(
-                title = chat?.title ?: stringResource(R.string.app_name),
-                onBack = onBack
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHost) },
-        bottomBar = {
-            ChatInput(
-                enabled = !isGenerating,
-                onSend = { vm.sendMessage(it) }
-            )
-        }
-    ) { padding ->
-        if (messages.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text(
-                    stringResource(R.string.empty_chat),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Fondo animado
+        AuroraBackground()
+        CyberGridOverlay()
+        FloatingParticles(count = 20)
+        ScanLineOverlay()
+
+        Scaffold(
+            containerColor = Color.Transparent,
+            topBar = {
+                AppTopBar(
+                    title = chat?.title ?: stringResource(R.string.app_name),
+                    onBack = onBack
+                )
+            },
+            snackbarHost = { SnackbarHost(snackbarHost) },
+            bottomBar = {
+                ChatInput(
+                    enabled = !isGenerating,
+                    onSend = { vm.sendMessage(it) }
                 )
             }
-        } else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                items(messages, key = { it.id }) { msg ->
-                    val lastAssistantId = messages.lastOrNull {
-                        it.role == Constants.ROLE_ASSISTANT
-                    }?.id
-                    MessageBubble(
-                        message = msg,
-                        fontSize = 16,
-                        isLastAssistant = msg.id == lastAssistantId,
-                        onCopy = { vm.onCopyMessage(it) },
-                        onDelete = { vm.deleteMessage(it) },
-                        onRegenerate = { vm.regenerateLast() }
+        ) { padding ->
+            if (messages.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        stringResource(R.string.empty_chat),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White.copy(alpha = 0.6f)
                     )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(messages, key = { it.id }) { msg ->
+                        val lastAssistantId = messages.lastOrNull {
+                            it.role == Constants.ROLE_ASSISTANT
+                        }?.id
+                        MessageBubble(
+                            message = msg,
+                            fontSize = 16,
+                            isLastAssistant = msg.id == lastAssistantId,
+                            onCopy = { vm.onCopyMessage(it) },
+                            onDelete = { vm.deleteMessage(it) },
+                            onRegenerate = { vm.regenerateLast() }
+                        )
+                    }
                 }
             }
         }
